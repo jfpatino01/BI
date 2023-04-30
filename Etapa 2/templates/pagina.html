@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>La bola de cristal del grupo Paella</title>
+	<style>
+		body {
+			background-color: #1E1E1E;
+			color: white;
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 18px;
+		}
+
+		h1 {
+			font-size: 48px;
+			text-align: center;
+			margin-top: 50px;
+		}
+
+		form {
+			margin: 50px auto;
+			width: 50%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		input[type="file"] {
+			margin-top: 20px;
+			padding: 10px;
+			font-size: 16px;
+			border: none;
+			background-color: white;
+			border-radius: 5px;
+			box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+			width: 100%;
+			max-width: 400px;
+			box-sizing: border-box;
+		}
+
+		button[type="submit"] {
+			margin-top: 20px;
+			padding: 10px;
+			font-size: 16px;
+			border: none;
+			background-color: #ffbb54;
+			color: white;
+			border-radius: 5px;
+			box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+			width: 100%;
+			max-width: 400px;
+			box-sizing: border-box;
+			cursor: pointer;
+			transition: background-color 0.2s ease-in-out;
+		}
+
+		button[type="submit"]:hover {
+			background-color: #ff9d2e;
+		}
+
+	</style>
+</head>
+<body>
+	<h1>La bola de cristal del grupo Paella</h1>
+	<div class="container">
+
+		<form method="post" enctype="multipart/form-data" action="/predict-file" class="upload-form">
+            <label>Bienvenido! Por favor, suba un archivo CSV con las reviews a analizar y presione "Empezar la lectura".</label>
+			<label class="upload-label">Subir archivo:</label>
+			<input type="file" name="file" class="upload-input" accept=".csv">
+			<button type="submit" class="upload-button">Empezar la lectura</button>
+            <button href="/download" class="download-button">Descargar resultados</button>
+		</form>
+        <div style="text-align:center">
+            <figure>
+                <img src="pie_chart.png" alt="pie chart" width="500" height="500">
+            </figure>
+            <a href="/download" download>
+                <button class="download-button">Descargar resultados</button>
+            </a>
+        </div>
+
+        <img src="tumblr_ac30bcd390654538044e358f6fe6f3a0_fb7e093a_250.gif" alt="GIF image" width="300" height="300">
+	</div>
+</body>
+</html>
