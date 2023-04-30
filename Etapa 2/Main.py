@@ -9,7 +9,7 @@ from fastapi import FastAPI, UploadFile, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, FileResponse
 
-from Modelo import Model
+from modelo import Model
 import htmlCont as hc
 
 current = os.path.dirname(os.path.realpath(__file__))
