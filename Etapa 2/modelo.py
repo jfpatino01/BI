@@ -20,13 +20,13 @@ class Model:
         stop_words = set(stopwords.words('spanish'))
 
     def make_predictions(self, data):
-        model = joblib.load('/Users/pipe/Desktop/GitHub/BI/Etapa 2/assets/modelo.joblib')
+        model = joblib.load('assets/modelo.joblib')
         dataP = data['review_es']
         pred = model.predict(dataP)
         return pred
 
     def make_predictions_one(self, data):
-        model = joblib.load('/Users/pipe/Desktop/GitHub/BI/Etapa 2/assets/modelo.joblib')
+        model = joblib.load('assets/modelo.joblib')
         pred = model.predict([data])
         print(pred)
         return pred[0]
