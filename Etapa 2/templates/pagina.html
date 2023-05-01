@@ -6,7 +6,7 @@
 	<title>La bola de cristal del grupo Paella</title>
 	<style>
 		body {
-			background-color: #1E1E1E;
+			background-color: #000000;
 			color: white;
 			font-family: Arial, Helvetica, sans-serif;
 			font-size: 18px;
@@ -59,29 +59,108 @@
 			background-color: #ff9d2e;
 		}
 
+		.container {
+		width: 100%;
+		height: 100vh;
+		}
+
+		.toppane {
+		width: 100%;
+		height: 100px;
+		background-color: #000000;
+		}
+
+		.leftpane {
+		width: 25%;
+		height: 100vh;
+		background-color: rgb(0, 0, 0);
+		}
+
+		.middlepane {
+		width: 50%;
+		height: 100vh;
+		background-color: rgb(0, 0, 0);
+		}
+
+		.rightpane {
+		width: 25%;
+		height: 100vh;
+		background-color: rgb(0, 0, 0);
+		}
+
+		body {
+		margin: 0!important;
+		}
+
+		.d-flex {
+		display: flex;
+		}
+
 	</style>
 </head>
-<body>
-	<h1>La bola de cristal del grupo Paella</h1>
-	<div class="container">
 
-		<form method="post" enctype="multipart/form-data" action="/predict-file" class="upload-form">
-            <label>Bienvenido! Por favor, suba un archivo CSV con las reviews a analizar y presione "Empezar la lectura".</label>
-			<label class="upload-label">Subir archivo:</label>
-			<input type="file" name="file" class="upload-input" accept=".csv">
-			<button type="submit" class="upload-button">Empezar la lectura</button>
-            <button href="/download" class="download-button">Descargar resultados</button>
-		</form>
-        <div style="text-align:center">
-            <figure>
-                <img src="pie_chart.png" alt="pie chart" width="500" height="500">
-            </figure>
-            <a href="/download" download>
-                <button class="download-button">Descargar resultados</button>
-            </a>
-        </div>
-
-        <img src="tumblr_ac30bcd390654538044e358f6fe6f3a0_fb7e093a_250.gif" alt="GIF image" width="300" height="300">
+<div class="container">
+	<div class="toppane">
+		<h1>La bola de cristal del grupo Paella</h1>
 	</div>
-</body>
+	<div class="d-flex">
+	  <div class="leftpane">
+		<h1>        
+			<br />
+			<img src="https://64.media.tumblr.com/ac30bcd390654538044e358f6fe6f3a0/48646627e360b300-f9/s250x400/fb7e093ad387953fc739abcf274e69e464767381.gifv" alt="GIF image" width="300" height="300">
+		</h1>
+	  </div>
+	  <div class="middlepane">
+		
+		<body>
+			<div class="container">
+				<center><label>Ingresa una tuit para clasificar</label></center>
+				<form method="get" action="/predict-one-text" id="textarea">
+					<textarea name="input_text" id="input" rows="4" cols="50" required></textarea>
+					<br><br>
+					{% for value in prediction %}
+						<p>Sentimiento de Review: {{ value }}</p>
+					{% endfor %}
+					<button type="submit" id="submit" class="btn-custom">Clasificar</button>
+					<script>
+						var value = localStorage.getItem('submit');
+						if (value) {
+							document.getElementById('input').value = value;
+						}
+					</script>
+				</form>
+				
+				<form method="post" enctype="multipart/form-data" action="/predict-file" class="upload-form">
+					<label><center>Ingresar archivo CSV con las reviews
+						en la columna 'review_es' a clasificar
+						 </center></label>
+					<center><label class="upload-label">Subir archivo:</label>
+					<input type="file" name="file" class="upload-input" accept=".csv"><br /></center>
+					<center><button type="submit" class="upload-button">Empezar la lectura de CSV</button></center><br />
+					{% for value in prediction2 %}
+						<p>La clasificacion fue: {{ value }}</p>
+					{% endfor %}
+				</form>
+				<form method="get" enctype="multipart/form-data" action="/download">
+				<center><button href="/download" class="download-button">Descargar resultados CSV</button></center>
+				</form>
+		
+		
+			</div>
+		</body>
+
+	  </div>
+	  <div class="rightpane">
+		<h1>
+			<br /><br />
+			<img src="https://i.gifer.com/V8aP.gif" alt="GIF image" width="300" height="200">
+
+			
+
+		</h1>
+	  </div>
+	</div>
+  </div>
+
+
 </html>

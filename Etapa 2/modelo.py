@@ -6,6 +6,7 @@ import joblib
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import TweetTokenizer
+import tokenizer
 
 #current = os.path.dirname(os.path.realpath(__file__))
 #parent = os.path.dirname(os.path.dirname(current))
@@ -15,16 +16,18 @@ class Model:
 
     def __init__(self):
         self.model = None
-
-    def make_predictions(self, data):
         nltk.download('stopwords')
         stop_words = set(stopwords.words('spanish'))
-        
-        model = joblib.load('/assets/modelo.joblib')
-        pred = model.predict(data)
+
+    def make_predictions(self, data):
+        model = joblib.load('/Users/pipe/Desktop/GitHub/BI/Etapa 2/assets/modelo.joblib')
+        dataP = data['review_es']
+        pred = model.predict(dataP)
         return pred
 
-# Función para tokenizar los tweets
-def tokenizer(text):
-    tt = TweetTokenizer()
-    return tt.tokenize(text) 
+    def make_predictions_one(self, data):
+        model = joblib.load('/Users/pipe/Desktop/GitHub/BI/Etapa 2/assets/modelo.joblib')
+        pred = model.predict([data])
+        print(pred)
+        return pred[0]
+

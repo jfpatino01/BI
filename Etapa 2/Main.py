@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 from io import StringIO
 from fastapi import FastAPI, UploadFile, Request
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
 
 from modelo import Model
 import htmlCont as hc
@@ -23,14 +23,15 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
 # Controller
-filename = 'uploaded/reviews_result.csv'
+filename = 'assets/reviews_result.csv'
 
-@app.get("/")
+@app.get('/')
 async def root(request: Request):
     return templates.TemplateResponse("pagina.html", {"request": request})
 
 @app.post("/predict-file")
 async def predict_from_file(request: Request, file: UploadFile):
+    print("Entro file")
     # Check if uploaded file is CSV
     ext = os.path.splitext(file.filename)[1]
     if ext.lower() not in ['.csv']:
@@ -44,32 +45,39 @@ async def predict_from_file(request: Request, file: UploadFile):
     model = Model()
     predictions = model.make_predictions(df)
 
-    # Combine the input CSV and the predictions into a single DataFrame
-    results_df = pd.concat([df, predictions['sentimiento'].replace({1: "negativo", 0: "positivo"})], axis=1)
+    # create a dataframe from the numpy array
+    sentimientos = pd.DataFrame(predictions)
 
+    # replace values of 1 and 0 with "negativo" and "positivo", respectively
+    sentimientos = sentimientos.replace({1: "negativo", 0: "positivo"})
+
+    # rename the column to "sentimientos"
+    sentimientos.columns = ["sentimiento"]
+
+    # join the new dataframe to the existing dataframe "df"
+    results_df = pd.concat([df, sentimientos], axis=1)
     # Save the results DataFrame to a CSV file in the "assets" folder
     results_df.to_csv(filename, index=False)
 
-    # Create a pie chart to visualize the sentiment distribution
-    fig = go.Figure(
-        data=[go.Pie(
-            labels=results_df['sentimiento'].replace({1: "negativo", 0: "positivo"}).value_counts().index,
-            values=results_df['sentimiento'].replace({1: "negativo", 0: "positivo"}).value_counts().values,
-        )],
-        layout=go.Layout(width=400, height=400),
-    )
-    fig.update_layout(
-        title="Pie Chart: Sentiment of Reviews",
-        legend_title="Sentiment",
-    )
-
-    # Generate HTML content for the pie chart
-    html_content = hc.html_content_pie_graph() % fig.to_json()
-
     # Return the HTML response to the user
-    return HTMLResponse(content=html_content, status_code=200)
+    return templates.TemplateResponse('pagina.html', {"request": request, "prediction2": ['exitosa']})
+
+
+@app.get("/predict-one-text")
+async def predict_one_text(request: Request, input_text: str):
+    print(input_text)
+    model = Model()
+    prediction = model.make_predictions_one(input_text)
+    print(prediction)
+
+    if prediction == 1:
+        result = ["Postivio"]
+    else:
+        result = ["Negativo"]
+
+    return templates.TemplateResponse('pagina.html', {"request": request, "prediction": result})
+
 
 @app.get("/download")
 async def get_data():
-    # Return the results file as a download to the user
-    return FileResponse(filename, filename="reviews_result.csv")
+    return FileResponse(filename, filename="assets/reviews_result.csv")
